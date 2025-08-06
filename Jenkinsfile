@@ -15,24 +15,38 @@ pipeline {
             }
         }
 
-    stage('Deploy') {
+        stage('Manual Approval for Prod') {
+            when {
+                expression { return params.ENVIRONMENT == 'prod' }
+            }
             steps {
                 script {
-                    echo "Selected environment: ${params.ENVIRONMENT}"
-
+                    def userInput = input(
+                        id: 'ProdApproval', message: 'Approve Production Deployment?', parameters: [
+                            [$class: 'TextParameterDefinition', defaultValue: '', description: 'Enter reason for approval', name: 'ApprovalReason']
+                        ]
+                    )
+                    echo "Approval reason: ${userInput}"
+                }
+            }
+        }
+        
+        stage('Run Environment Specific Steps') {
+            steps {
+                script {
                     if (params.ENVIRONMENT == 'dev') {
-                        echo 'Executing DEV deployment...'
-                        // sh './deploy_dev.sh'
+                        echo 'Running DEV deployment steps...'
+                        // Add dev-specific commands here
                     } else if (params.ENVIRONMENT == 'qa') {
-                        echo 'Executing QA deployment...'
-                        // sh './deploy_qa.sh'
+                        echo 'Running QA deployment steps...'
+                        // Add QA-specific commands here
                     }
                     else if (params.ENVIRONMENT == 'prod') {
-                        echo 'Executing PROD deployment...'
-                        // sh './deploy_prod.sh'
+                        echo 'Running PROD deployment steps...'
+                        // Add prod-specific commands here
                     }
                 }
             }
         }
-    }
+    }       
 }
