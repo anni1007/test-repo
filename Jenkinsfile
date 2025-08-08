@@ -3,7 +3,7 @@ pipeline {
     triggers {
         // Poll GitHub every 1 minute for changes
         githubPush()
-        pollSCM('* * * * *')
+        pollSCM('*/10 * * * *')
     }
     stages {
         stage('Checkout') {
