@@ -22,7 +22,10 @@ pipeline {
             steps {
                 script {
                     def userInput = input(
-                        id: 'ProdApproval', message: 'Approve Production Deployment?', parameters: [
+                        id: 'ProdApproval', 
+                        message: 'Approve Production Deployment?', 
+                        submitter: 'devops_admin, teamlead_user', //comma-separated Jenkins usernames
+                        parameters: [
                             [$class: 'TextParameterDefinition', defaultValue: '', description: 'Enter reason for approval', name: 'ApprovalReason']
                         ]
                     )
