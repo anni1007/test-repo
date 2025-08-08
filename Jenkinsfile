@@ -1,6 +1,6 @@
 pipeline {
     agent any
-triggers {
+    triggers {
         // Poll GitHub every 1 minute for changes
         pollSCM('* * * * *')
     }
@@ -42,7 +42,7 @@ triggers {
         success {
             echo '✅ Build and Deployment successful.'
         }
-failure {
+    failure {
             echo '❌ Build or Deployment failed.'
         }
     }
