@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    triggers {
+triggers {
         // Poll GitHub every 1 minute for changes
         pollSCM('* * * * *')
     }
@@ -15,7 +15,7 @@ pipeline {
             steps {
                 echo 'Building the application...'
                 // Example build command
-                sh 'npm install'
+              // sh 'npm install'
             }
         }
 
@@ -32,8 +32,8 @@ pipeline {
                 // sh """
                 // mkdir -p $DEPLOY_PATH
                 // cp -r * $DEPLOY_PATH/
-                // echo 'Deployed at: ' $(date)
-                """
+               // echo 'Deployed at: ' $(date)
+               // """
             }
         }
     }
@@ -42,7 +42,7 @@ pipeline {
         success {
             echo '✅ Build and Deployment successful.'
         }
-    failure {
+failure {
             echo '❌ Build or Deployment failed.'
         }
     }
