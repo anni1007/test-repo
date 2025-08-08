@@ -1,10 +1,10 @@
 pipeline {
     agent any
-triggers {
+    triggers {
         // Poll GitHub every 1 minute for changes
         pollSCM('* * * * *')
     }
-stages {
+    stages {
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/anni1007/test-repo'
