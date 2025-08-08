@@ -1,55 +1,49 @@
 pipeline {
     agent any
-    
-    parameters {
-        choice(
-            name: 'ENVIRONMENT',
-            choices: ['dev', 'qa', 'prod'],
-            description: 'Select the environment'
-        )
+triggers {
+        // Poll GitHub every 1 minute for changes
+        pollSCM('* * * * *')
     }
-    stages {
+stages {
         stage('Checkout') {
             steps {
-               git url: 'https://github.com/anni1007/test-repo.git', branch: 'main'
+                git branch: 'main', url: 'https://github.com/anni1007/test-repo'
             }
         }
 
-        stage('Manual Approval for Prod') {
-            when {
-                expression { return params.ENVIRONMENT == 'prod' }
-            }
+        stage('Build') {
             steps {
-                script {
-                    def userInput = input(
-                        id: 'ProdApproval', 
-                        message: 'Approve Production Deployment?', 
-                        submitter: 'devops_admin, teamlead_user', //comma-separated Jenkins usernames
-                        parameters: [
-                            [$class: 'TextParameterDefinition', defaultValue: '', description: 'Enter reason for approval', name: 'ApprovalReason']
-                        ]
-                    )
-                    echo "Approval reason: ${userInput}"
-                }
+                echo 'Building the application...'
+                // Example build command
+                sh 'npm install'
             }
         }
-        
-        stage('Run Environment Specific Steps') {
+
+        stage('Test') {
             steps {
-                script {
-                    if (params.ENVIRONMENT == 'dev') {
-                        echo 'Running DEV deployment steps...'
-                        // Add dev-specific commands here
-                    } else if (params.ENVIRONMENT == 'qa') {
-                        echo 'Running QA deployment steps...'
-                        // Add QA-specific commands here
-                    }
-                    else if (params.ENVIRONMENT == 'prod') {
-                        echo 'Running PROD deployment steps...'
-                        // Add prod-specific commands here
-                    }
-                }
+                echo 'Running tests...'
+                // Example test command
             }
         }
-    }       
+        stage('Deploy') {
+            steps {
+                echo 'Deploying to $DEPLOY_PATH ...'
+                // Sample deployment (replace with your actual command)
+                sh """
+                mkdir -p $DEPLOY_PATH
+                cp -r * $DEPLOY_PATH/
+                echo 'Deployed at: ' $(date)
+                """
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Build and Deployment successful.'
+        }
+    failure {
+            echo '❌ Build or Deployment failed.'
+        }
+    }
 }
