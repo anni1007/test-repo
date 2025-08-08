@@ -32,7 +32,7 @@ stages {
                 sh """
                 mkdir -p $DEPLOY_PATH
                 cp -r * $DEPLOY_PATH/
-                echo 'Deployed at: ' $(date)
+                //echo 'Deployed at: ' $(date)
                 """
             }
         }
