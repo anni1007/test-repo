@@ -1,10 +1,11 @@
 pipeline {
     agent any
-triggers {
-        // Poll GitHub every 1 minute for changes
-        pollSCM('* * * * *')
+    triggers {
+        // Poll GitHub every 1 minute for changess
+        githubPush()
+        pollSCM('*/10 * * * *')
     }
-stages {
+    stages {
         stage('Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/anni1007/test-repo'
@@ -14,8 +15,8 @@ stages {
         stage('Build') {
             steps {
                 echo 'Building the application...'
-                // Example build command
-                sh 'npm install'
+                // Example build commandjj
+              // sh 'npm install'
             }
         }
 
@@ -29,11 +30,11 @@ stages {
             steps {
                 echo 'Deploying to $DEPLOY_PATH ...'
                 // Sample deployment (replace with your actual command)
-                sh """
-                mkdir -p $DEPLOY_PATH
-                cp -r * $DEPLOY_PATH/
-                //echo 'Deployed at: ' $(date)
-                """
+                // sh """
+                // mkdir -p $DEPLOY_PATH
+                // cp -r * $DEPLOY_PATH/
+               // echo 'Deployed at: ' $(date)
+               // """
             }
         }
     }
