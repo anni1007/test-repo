@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+    triggers {
+        // Poll GitHub every 1 minute for changess
+        githubPush()
+        pollSCM('*/10 * * * *')
+    }
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/anni1007/test-repo'
+            }
+        }
+
+        stage('Build') {
+            steps {
+                echo 'Building the application...'
+                // Example build commandjj
+              // sh 'npm install'
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo 'Running tests...'
+                // Example test command
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo 'Deploying to $DEPLOY_PATH ...'
+                // Sample deployment (replace with your actual command)
+                // sh """
+                // mkdir -p $DEPLOY_PATH
+                // cp -r * $DEPLOY_PATH/
+               // echo 'Deployed at: ' $(date)
+               // """
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '✅ Build and Deployment successful.'
+        }
+    failure {
+            echo '❌ Build or Deployment failed.'
+        }
+    }
+}
